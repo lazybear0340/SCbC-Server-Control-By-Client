@@ -1,6 +1,3 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -99,13 +96,11 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     end
 end)
 
--- Separate connection just for camera to avoid conflicts
 RunService:BindToRenderStep("DesyncCamera", Enum.RenderPriority.Camera.Value, function()
     if not teleportEnabled or not cameraCFrame then return end
     
     local camera = Workspace.CurrentCamera
     
-    -- Rotate camera with right click
     if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
         local mouseDelta = UserInputService:GetMouseDelta()
         local sensitivity = 0.5
@@ -141,7 +136,6 @@ LocalPlayer.CharacterAdded:Connect(function(character)
     end
 end)
 
--- Cleanup
 ScreenGui.Destroying:Connect(function()
     disableDesync()
     RunService:UnbindFromRenderStep("DesyncCamera")
