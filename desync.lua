@@ -141,4 +141,4 @@ ScreenGui.Destroying:Connect(function()
     RunService:UnbindFromRenderStep("DesyncCamera")
 end)
 
-print("LOADED")
+print("finished")
