@@ -21,27 +21,27 @@ local FrameCorner = Instance.new("UICorner")
 FrameCorner.CornerRadius = UDim.new(0, 8)
 FrameCorner.Parent = Frame
 
-local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(0, 80, 0, 30)
-ToggleButton.Position = UDim2.new(0.5, -40, 0.5, -15)
-ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-ToggleButton.Text = "OFF"
-ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleButton.Font = Enum.Font.SourceSansBold
-ToggleButton.TextSize = 18
-ToggleButton.Parent = Frame
+local toggle = Instance.new("TextButton")
+toggle.Size = UDim2.new(0, 80, 0, 30)
+toggle.Position = UDim2.new(0.5, -40, 0.5, -15)
+toggle.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+toggle.Text = "OFF"
+toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggle.Font = Enum.Font.SourceSansBold
+toggle.TextSize = 18
+toggle.Parent = Frame
 
-local ToggleCorner = Instance.new("UICorner")
-ToggleCorner.CornerRadius = UDim.new(0, 6)
-ToggleCorner.Parent = ToggleButton
+local tgui = Instance.new("UICorner")
+tgui.CornerRadius = UDim.new(0, 6)
+tgui.Parent = toggle
 
-local teleportEnabled = false
+local tenabled = false
 local cameraCFrame = nil
 local cameraFocus = nil
 local targetCFrame = CFrame.new(0, -100000000000000000000000000000, 0)
 local root = nil
 
-local function enableDesync()
+local function denable()
     local camera = Workspace.CurrentCamera
     local character = LocalPlayer.Character
     if not character then return end
@@ -54,7 +54,7 @@ local function enableDesync()
     camera.CameraType = Enum.CameraType.Scriptable
 end
 
-local function disableDesync()
+local function ddisable()
     local camera = Workspace.CurrentCamera
     camera.CameraType = Enum.CameraType.Custom
     local character = LocalPlayer.Character
@@ -69,35 +69,35 @@ local function disableDesync()
     root = nil
 end
 
-ToggleButton.MouseButton1Click:Connect(function()
-    teleportEnabled = not teleportEnabled
-    ToggleButton.Text = teleportEnabled and "ON" or "OFF"
-    ToggleButton.BackgroundColor3 = teleportEnabled and Color3.fromRGB(150, 50, 50) or Color3.fromRGB(70, 70, 70)
+toggle.MouseButton1Click:Connect(function()
+    tenabled = not tenabled
+    toggle.Text = tenabled and "ON" or "OFF"
+    toggle.BackgroundColor3 = tenabled and Color3.fromRGB(150, 50, 50) or Color3.fromRGB(70, 70, 70)
     
-    if teleportEnabled then
-        enableDesync()
+    if tenabled then
+        denable()
     else
-        disableDesync()
+        ddisable()
     end
 end)
 
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
     if input.KeyCode == Enum.KeyCode.C then
-        teleportEnabled = not teleportEnabled
-        ToggleButton.Text = teleportEnabled and "ON" or "OFF"
-        ToggleButton.BackgroundColor3 = teleportEnabled and Color3.fromRGB(150, 50, 50) or Color3.fromRGB(70, 70, 70)
+        tenabled = not tenabled
+        toggle.Text = tenabled and "ON" or "OFF"
+        toggle.BackgroundColor3 = tenabled and Color3.fromRGB(150, 50, 50) or Color3.fromRGB(70, 70, 70)
         
-        if teleportEnabled then
-            enableDesync()
+        if tenabled then
+            denable()
         else
-            disableDesync()
+            ddisable()
         end
     end
 end)
 
-RunService:BindToRenderStep("DesyncCamera", Enum.RenderPriority.Camera.Value, function()
-    if not teleportEnabled or not cameraCFrame then return end
+RunService:BindToRenderStep("dcamera", Enum.RenderPriority.Camera.Value, function()
+    if not tenabled or not cameraCFrame then return end
     
     local camera = Workspace.CurrentCamera
     
@@ -115,7 +115,7 @@ RunService:BindToRenderStep("DesyncCamera", Enum.RenderPriority.Camera.Value, fu
 end)
 
 RunService.Heartbeat:Connect(function()
-    if not teleportEnabled then return end
+    if not tenabled then return end
     
     if root and root.Parent then
         for _ = 1, 10 do
@@ -130,15 +130,15 @@ RunService.Heartbeat:Connect(function()
 end)
 
 LocalPlayer.CharacterAdded:Connect(function(character)
-    if teleportEnabled then
+    if tenabled then
         task.wait(0.5)
-        enableDesync()
+        denable()
     end
 end)
 
 ScreenGui.Destroying:Connect(function()
-    disableDesync()
-    RunService:UnbindFromRenderStep("DesyncCamera")
+    ddisable()
+    RunService:UnbindFromRenderStep("dcamera")
 end)
 
 print("finished")
