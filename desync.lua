@@ -1,3 +1,4 @@
+-- this will put your client in void while keeping the server revealed
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
